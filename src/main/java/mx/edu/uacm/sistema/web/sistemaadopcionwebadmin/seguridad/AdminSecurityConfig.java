@@ -1,6 +1,6 @@
-package mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.seguridad;
+package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.seguridad;
 
-import mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.service.CustomUserDetailsService;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -11,8 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@Order(1)
-public class DonadorSecurityConfig {
+@Order(3)
+public class AdminSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
@@ -25,19 +25,19 @@ public class DonadorSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain3(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/").permitAll();
-        http.antMatcher("/donador/**")
-                .authorizeRequests().anyRequest().hasAuthority("DONADOR")
+        http.antMatcher("/admin/**")
+                .authorizeRequests().anyRequest().hasAuthority("ADMIN")
                 .and()
                 .formLogin()
-                .loginPage("/donador/login")
+                .loginPage("/admin/login")
                 .usernameParameter("email")
-                .loginProcessingUrl("/donador/login")
-                .defaultSuccessUrl("/donador/home")
+                .loginProcessingUrl("/admin/login")
+                .defaultSuccessUrl("/admin/home")
                 .permitAll()
                 .and()
-                .logout().logoutUrl("/donador/logout")
+                .logout().logoutUrl("/admin/logout")
                 .logoutSuccessUrl("/");
         return http.build();
     }

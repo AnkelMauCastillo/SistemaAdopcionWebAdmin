@@ -1,6 +1,6 @@
-package mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.repositorio;
+package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.repositorio;
 
-import mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.modelo.Usuario;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo.Usuario;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

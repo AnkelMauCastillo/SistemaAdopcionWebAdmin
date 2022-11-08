@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <title>Admin</title>
+</head>
+<body>
+    <h2>Admin Home</h2>
+    <a th:href="@{/admin/nuevo}">Crear Nuevo Admin</a>
+
+    <div th:if="${mensaje != null}" class="alert alert-success text-center">
+        [[${mensaje}]]
+    </div>
+    
+    <div>
+        <table class="table table-bordered table-striped table-hover table-responsive-xL">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID USUARIO</th>
+                    <th>ROL USUARIO</th>
+                    <th>NOMBRE</th>
+                    <th>APELLIDO PATERNO</th>
+                    <th>APELLIDO MATERNO</th>
+                    <th>FECHA DE NACIMIENTO</th>
+                    <th>GENERO</th>
+                    <th>EMAIL</th>
+                    <th>EDAD</th>
+                    <th>CALLE</th>
+                    <th>CODIGO POSTAL</th>
+                    <th>ALCALDIA</th>
+                    <th>COLONIA</th>
+                    <th>NUMERO EXTERIOR</th>
+                    <th>NUMERO INTERIOR</th>
+                    <th>CELULAR</th>
+                    <th>TELEFONO FIJO</th>
+                    <th>COMPROBANTE DE DOMICILIO</th>
+                    <th>INE</th>
+                    <th>HABILITADO</th>
+                    <th></th>
+                </tr>               
+                <tbody>
+                    <tr th:each="usuario : ${usuarioList}">
+                        <td>[[${usuario.idUsuario}]]</td>
+                        <td>[[${usuario.role}]]</td>
+                        <td>[[${usuario.nombreUsuario}]]</td>
+                        <td>[[${usuario.apellidoPaterno}]]</td>
+                        <td>[[${usuario.apellidoMaterno}]]</td>
+                        <td>[[${usuario.fechaNcimientoUsuario}]]</td>
+                        <td>[[${usuario.generoUsuario}]]</td>
+                        <td>[[${usuario.emailUsuario}]]</td>
+                        <td>[[${usuario.edadUsuario}]]</td>
+                        <td>[[${usuario.calleUsuario}]]</td>
+                        <td>[[${usuario.codigoPostalUsuario}]]</td>
+                        <td>[[${usuario.alcaldia}]]</td>
+                        <td>[[${usuario.colonia}]]</td>
+                        <td>[[${usuario.numeroExterior}]]</td>
+                        <td>[[${usuario.numeroInterior}]]</td>                        
+                        <td>[[${usuario.celUsuario}]]</td>
+                        <td>[[${usuario.telFijoUsuario}]]</td>
+                        <td>[[${usuario.comprobanteDomicilioFile}]]</td>
+                        <td>[[${usuario.identificacionOficialFile}]]</td>
+                        <td>[[${usuario.habilitado}]]</td>
+                        <td>
+                            Editar &nbsp; Eliminar
+                        </td>
+                    </tr>
+                </tbody> 
+            </thead>
+        </table>
+    </div>
+</body>
+</html>

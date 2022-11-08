@@ -1,6 +1,6 @@
-package mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.seguridad;
+package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.seguridad;
 
-import mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.modelo.Usuario;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

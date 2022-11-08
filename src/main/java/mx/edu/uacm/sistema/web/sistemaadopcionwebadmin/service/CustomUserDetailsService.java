@@ -1,8 +1,8 @@
-package mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.service;
+package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.service;
 
-import mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.modelo.Usuario;
-import mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.repositorio.UsuarioRepository;
-import mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.seguridad.CustomUserDetails;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo.Usuario;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.repositorio.UsuarioRepository;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.seguridad.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

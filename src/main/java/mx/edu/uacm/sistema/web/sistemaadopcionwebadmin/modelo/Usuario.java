@@ -1,4 +1,4 @@
-package mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.modelo;
+package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo;
 
 import javax.persistence.*;
 import java.io.File;
@@ -23,50 +23,20 @@ public class Usuario {
     private String emailUsuario;
     private int edadUsuario;
     private String calleUsuario;
-    private int codigoPostalUsuario;
+    private String codigoPostalUsuario;
     private String alcaldia;
     private String colonia;
     private int numeroExterior;
     private int numeroInterior;
     private int celUsuario;
     private int telFijoUsuario;
-    private File comprobanteDomicilioFile;
-    private File identificacionOficialFile;
+    private String comprobanteDomicilioFile;
+    private String identificacionOficialFile;
     @Column(nullable = false, length = 64)
     private String password;
-
-    public Usuario(Role role, String nombreUsuario, String apellidoPaterno, String apellidoMaterno, Date fechaNcimientoUsuario, String generoUsuario, String emailUsuario, int edadUsuario, String calleUsuario, int codigoPostalUsuario, String alcaldia, String colonia, int numeroExterior, int numeroInterior, int celUsuario, int telFijoUsuario, File comprobanteDomicilioFile, File identificacionOficialFile, String password) {
-        this.role = role;
-        this.nombreUsuario = nombreUsuario;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
-        this.fechaNcimientoUsuario = fechaNcimientoUsuario;
-        this.generoUsuario = generoUsuario;
-        this.emailUsuario = emailUsuario;
-        this.edadUsuario = edadUsuario;
-        this.calleUsuario = calleUsuario;
-        this.codigoPostalUsuario = codigoPostalUsuario;
-        this.alcaldia = alcaldia;
-        this.colonia = colonia;
-        this.numeroExterior = numeroExterior;
-        this.numeroInterior = numeroInterior;
-        this.celUsuario = celUsuario;
-        this.telFijoUsuario = telFijoUsuario;
-        this.comprobanteDomicilioFile = comprobanteDomicilioFile;
-        this.identificacionOficialFile = identificacionOficialFile;
-        this.password = password;
-    }
+    private boolean habilitado;
 
     public Usuario() {
-
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Long getIdUsuario() {
@@ -77,7 +47,13 @@ public class Usuario {
         this.idUsuario = idUsuario;
     }
 
+    public Role getRole() {
+        return role;
+    }
 
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public String getNombreUsuario() {
         return nombreUsuario;
@@ -143,11 +119,11 @@ public class Usuario {
         this.calleUsuario = calleUsuario;
     }
 
-    public int getCodigoPostalUsuario() {
+    public String getCodigoPostalUsuario() {
         return codigoPostalUsuario;
     }
 
-    public void setCodigoPostalUsuario(int codigoPostalUsuario) {
+    public void setCodigoPostalUsuario(String codigoPostalUsuario) {
         this.codigoPostalUsuario = codigoPostalUsuario;
     }
 
@@ -199,27 +175,61 @@ public class Usuario {
         this.telFijoUsuario = telFijoUsuario;
     }
 
-    public File getComprobanteDomicilioFile() {
+    public String getComprobanteDomicilioFile() {
         return comprobanteDomicilioFile;
     }
 
-    public void setComprobanteDomicilioFile(File comprobanteDomicilioFile) {
+    public void setComprobanteDomicilioFile(String comprobanteDomicilioFile) {
         this.comprobanteDomicilioFile = comprobanteDomicilioFile;
     }
 
-    public File getIdentificacionOficialFile() {
+    public String getIdentificacionOficialFile() {
         return identificacionOficialFile;
     }
 
-    public void setIdentificacionOficialFile(File identificacionOficialFile) {
+    public void setIdentificacionOficialFile(String identificacionOficialFile) {
         this.identificacionOficialFile = identificacionOficialFile;
     }
 
-    public Role getRole() {
-        return role;
+    public String getPassword() {
+        return password;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(boolean habilitado) {
+        this.habilitado = habilitado;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "idUsuario=" + idUsuario +
+                ", role=" + role +
+                ", nombreUsuario='" + nombreUsuario + '\'' +
+                ", apellidoPaterno='" + apellidoPaterno + '\'' +
+                ", apellidoMaterno='" + apellidoMaterno + '\'' +
+                ", fechaNcimientoUsuario=" + fechaNcimientoUsuario +
+                ", generoUsuario='" + generoUsuario + '\'' +
+                ", emailUsuario='" + emailUsuario + '\'' +
+                ", edadUsuario=" + edadUsuario +
+                ", calleUsuario='" + calleUsuario + '\'' +
+                ", codigoPostalUsuario=" + codigoPostalUsuario +
+                ", alcaldia='" + alcaldia + '\'' +
+                ", colonia='" + colonia + '\'' +
+                ", numeroExterior=" + numeroExterior +
+                ", numeroInterior=" + numeroInterior +
+                ", celUsuario=" + celUsuario +
+                ", telFijoUsuario=" + telFijoUsuario +
+                ", comprobanteDomicilioFile='" + comprobanteDomicilioFile + '\'' +
+                ", identificacionOficialFile='" + identificacionOficialFile + '\'' +
+                ", habilitado=" + habilitado +
+                '}';
     }
 }

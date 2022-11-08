@@ -1,4 +1,4 @@
-package mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.modelo;
+package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

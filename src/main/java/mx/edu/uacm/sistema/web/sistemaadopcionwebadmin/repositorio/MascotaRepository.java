@@ -1,6 +1,6 @@
-package mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.repositorio;
+package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.repositorio;
 
-import mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.modelo.Mascota;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo.Mascota;
 import org.springframework.data.repository.CrudRepository;
 
 public interface MascotaRepository extends CrudRepository<Mascota, Long> {

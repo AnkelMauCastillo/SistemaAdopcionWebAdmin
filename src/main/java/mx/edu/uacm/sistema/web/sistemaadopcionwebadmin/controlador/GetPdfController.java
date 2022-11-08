@@ -1,6 +1,6 @@
-package mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.controlador;
+package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.controlador;
 
-import mx.edu.uacm.sistema.adopta.web.sistemaadopcionweb.service.CreatePdfService;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.service.CreatePdfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

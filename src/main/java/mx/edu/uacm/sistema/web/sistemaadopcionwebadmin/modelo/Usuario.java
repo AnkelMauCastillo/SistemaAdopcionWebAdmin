@@ -3,6 +3,7 @@ package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo;
 import javax.persistence.*;
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "usuarios")
@@ -35,6 +36,9 @@ public class Usuario {
     @Column(nullable = false, length = 64)
     private String password;
     private boolean habilitado;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Mascota> mascotas;
 
     public Usuario() {
     }

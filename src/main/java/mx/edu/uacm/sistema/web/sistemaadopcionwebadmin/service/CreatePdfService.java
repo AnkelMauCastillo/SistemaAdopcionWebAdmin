@@ -18,12 +18,16 @@ public class CreatePdfService {
     public void createPdf(){
         String filePdf = "D:/Desktop/pdfFile/SamplePdfFile.pdf";
         ArrayList<Mascota> mascotaList = new ArrayList<>();
+        /*
         Mascota mascota1 = new Mascota(1L,"Peluche","Macho",3L,3.45);
         Mascota mascota2 = new Mascota(1L,"Dexter","Macho",3L,3.45);
         mascotaList.add(mascota1);
         mascotaList.add(mascota2);
 
+         */
 
+
+        /*
         try {
             PdfWriter writer = new PdfWriter(filePdf);
             PdfDocument pdfDocument = new PdfDocument(writer);
@@ -49,5 +53,7 @@ public class CreatePdfService {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+         */
     }
 }

@@ -5,12 +5,14 @@ import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo.Role;
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo.Usuario;
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.repositorio.MascotaRepository;
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.repositorio.UsuarioRepository;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.service.UserNotFoundException;
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -55,6 +57,7 @@ public class UsuarioControlador {
         agregarRoles(listaRoles);
         model.addAttribute("usuario", usuario);
         model.addAttribute("listaRoles", listaRoles);
+        model.addAttribute("pageTitle", "Crear Nuevo Usuario");
         return "admin/admin_user_form";
     }
 
@@ -74,11 +77,33 @@ public class UsuarioControlador {
         }
     }
 
+    @GetMapping("/admin/editar/{idUsuario}")
+    public String editarUsuario(@PathVariable(name = "idUsuario") Long idUsuario,Model model ,RedirectAttributes redirectAttributes){
+        try {
+            Usuario usuario = service.get(idUsuario);
+            String listRoles = usuario.getRole().toString();
+            model.addAttribute("usuario",usuario);
+            model.addAttribute("listaRoles", listRoles);
+            model.addAttribute("pageTitle", "Editar Usuario (ID: " + idUsuario + ")");
+            return "admin/admin_user_form";
+        } catch (UserNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("mensaje", ex.getMessage());
+            return "redirect:/admin/home";
+        }
 
+    }
 
+    @GetMapping("/admin/eliminar/{idUsuario}")
+    public String eliminarUsuario(@PathVariable(name = "idUsuario") Long idUsuario,Model model ,RedirectAttributes redirectAttributes){
+        try {
+            service.delete(idUsuario);
+            redirectAttributes.addFlashAttribute("mensaje", "El usuario ID " + idUsuario + " ha sido eliminado con exito");
 
-
-
+        } catch (UserNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("mensaje", ex.getMessage());
+        }
+        return "redirect:/admin/home";
+    }
 
 
 }

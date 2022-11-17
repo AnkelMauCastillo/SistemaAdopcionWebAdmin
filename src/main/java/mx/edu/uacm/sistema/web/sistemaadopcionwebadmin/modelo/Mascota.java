@@ -6,9 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
+
 @Entity
 @Table(name = "mascotas")
 public class Mascota {
@@ -20,8 +18,19 @@ public class Mascota {
     private Long edadMascota;
     private Double pesoMascota;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
+
 
     public Mascota() {
 
+    }
+
+    public Mascota(String nombreMascota, String sexoMascota, Long edadMascota, Double pesoMascota) {
+        this.nombreMascota = nombreMascota;
+        this.sexoMascota = sexoMascota;
+        this.edadMascota = edadMascota;
+        this.pesoMascota = pesoMascota;
     }
 }

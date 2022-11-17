@@ -28,7 +28,7 @@ public class AdminTest {
     public void testCreateUserAdmin() {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Usuario user = new Usuario();
-        user.setEmailUsuario("eduardo@uacm.edu.mx");
+        user.setEmailUsuario("eduardo11@uacm.edu.mx");
         user.setPassword(passwordEncoder.encode("123456"));
         user.setNombreUsuario("EDuardo");
         //user.setIdRolUsuario(1);
@@ -42,6 +42,27 @@ public class AdminTest {
         assertThat(user.getEmailUsuario()).isEqualTo(existUser.getEmailUsuario());
 
     }
+
+    @Test
+    public void testGetUsuarioByEmail(){
+        String email = "aa@gmail.com";
+        Usuario usuario =usuarioRepository.getUsuarioByEmailUsuario(email);
+        assertThat(usuario).isNotNull();
+
+    }
+
+
+
+    @Test
+    public void testCountById(){
+        Long id = 3L;
+        Long counById = usuarioRepository.countByIdUsuario(id);
+        assertThat(counById).isNotNull().isGreaterThan(0);
+    }
+
+
+
+
 
 
 

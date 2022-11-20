@@ -1,8 +1,9 @@
 package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
-import java.io.File;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -18,19 +19,21 @@ public class Usuario {
     private String apellidoPaterno;
     private String apellidoMaterno;
 
-    private Date fechaNcimientoUsuario;
+    //@Temporal(TemporalType.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate fechaNcimientoUsuario;
     private String generoUsuario;
     @Column(nullable = false, unique = true)
     private String emailUsuario;
     private int edadUsuario;
     private String calleUsuario;
-    private String codigoPostalUsuario;
+    private Long codigoPostalUsuario;
     private String alcaldia;
     private String colonia;
-    private int numeroExterior;
-    private int numeroInterior;
-    private int celUsuario;
-    private int telFijoUsuario;
+    private Long numeroExterior;
+    private Long numeroInterior;
+    private Long celUsuario;
+    private Long telFijoUsuario;
     private String comprobanteDomicilioFile;
     private String identificacionOficialFile;
     @Column(nullable = false, length = 64)
@@ -39,6 +42,8 @@ public class Usuario {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Mascota> mascotas;
+
+
 
     public Usuario() {
     }
@@ -83,11 +88,11 @@ public class Usuario {
         this.apellidoMaterno = apellidoMaterno;
     }
 
-    public Date getFechaNcimientoUsuario() {
+    public LocalDate getFechaNcimientoUsuario() {
         return fechaNcimientoUsuario;
     }
 
-    public void setFechaNcimientoUsuario(Date fechaNcimientoUsuario) {
+    public void setFechaNcimientoUsuario(LocalDate fechaNcimientoUsuario) {
         this.fechaNcimientoUsuario = fechaNcimientoUsuario;
     }
 
@@ -123,11 +128,11 @@ public class Usuario {
         this.calleUsuario = calleUsuario;
     }
 
-    public String getCodigoPostalUsuario() {
+    public Long getCodigoPostalUsuario() {
         return codigoPostalUsuario;
     }
 
-    public void setCodigoPostalUsuario(String codigoPostalUsuario) {
+    public void setCodigoPostalUsuario(Long codigoPostalUsuario) {
         this.codigoPostalUsuario = codigoPostalUsuario;
     }
 
@@ -147,35 +152,35 @@ public class Usuario {
         this.colonia = colonia;
     }
 
-    public int getNumeroExterior() {
+    public Long getNumeroExterior() {
         return numeroExterior;
     }
 
-    public void setNumeroExterior(int numeroExterior) {
+    public void setNumeroExterior(Long numeroExterior) {
         this.numeroExterior = numeroExterior;
     }
 
-    public int getNumeroInterior() {
+    public Long getNumeroInterior() {
         return numeroInterior;
     }
 
-    public void setNumeroInterior(int numeroInterior) {
+    public void setNumeroInterior(Long numeroInterior) {
         this.numeroInterior = numeroInterior;
     }
 
-    public int getCelUsuario() {
+    public Long getCelUsuario() {
         return celUsuario;
     }
 
-    public void setCelUsuario(int celUsuario) {
+    public void setCelUsuario(Long celUsuario) {
         this.celUsuario = celUsuario;
     }
 
-    public int getTelFijoUsuario() {
+    public Long getTelFijoUsuario() {
         return telFijoUsuario;
     }
 
-    public void setTelFijoUsuario(int telFijoUsuario) {
+    public void setTelFijoUsuario(Long telFijoUsuario) {
         this.telFijoUsuario = telFijoUsuario;
     }
 
@@ -235,5 +240,11 @@ public class Usuario {
                 ", identificacionOficialFile='" + identificacionOficialFile + '\'' +
                 ", habilitado=" + habilitado +
                 '}';
+    }
+
+    @Transient
+    public String getIneImagePath(){
+        if (idUsuario == null || identificacionOficialFile == null) return "/image/default-user.png";
+        return "/user-photos/" + this.idUsuario + "/" + this.identificacionOficialFile;
     }
 }

@@ -7,16 +7,26 @@ import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.repositorio.MascotaReposi
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.repositorio.UsuarioRepository;
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.service.UserNotFoundException;
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.service.UsuarioService;
+import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -39,14 +49,35 @@ public class UsuarioControlador {
 
     @GetMapping("/admin/home")
     public String verPaginaDonadorHome(Model model){
-        List<Usuario> usuarioList =service.listAll();
-        model.addAttribute("usuarioList",usuarioList);
-        return "admin/admin_home";
+        return listByPage(1, model);
     }
 
     @GetMapping("/admin/login")
     public String verPaginaDonadorLogin(){
         return "admin/admin_login";
+    }
+
+    @GetMapping("/admin/page/{pageNum}")
+    public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model){
+        Page<Usuario> usuarioPage= service.listByPage(pageNum);
+        List<Usuario> usuarioList = usuarioPage.getContent();
+        System.out.println("Pagenum = " + pageNum);
+        System.out.println("Total de Elementos = " + usuarioPage.getTotalElements());
+        System.out.println("Total de paginas = " + usuarioPage.getTotalPages());
+        long starCount = (pageNum - 1) * service.USUARIOS_POR_PAGINA + 1;
+        long endCount = starCount + service.USUARIOS_POR_PAGINA - 1;
+
+        if (endCount > usuarioPage.getTotalElements()) {
+            endCount = usuarioPage.getTotalElements();
+        }
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", usuarioPage.getTotalPages());
+        model.addAttribute("starCount", starCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("totalItems", usuarioPage.getTotalElements());
+        model.addAttribute("usuarioList",usuarioList);
+        return "admin/admin_home";
     }
 
     @GetMapping("/admin/nuevo")
@@ -62,9 +93,28 @@ public class UsuarioControlador {
     }
 
     @PostMapping("/admin/guardar")
-    public String guardarUsuario(Usuario usuario, RedirectAttributes redirectAttributes){
+    public String guardarUsuario(Usuario usuario, RedirectAttributes redirectAttributes,
+                                 @RequestParam("image") MultipartFile multipartFile) throws IOException {
+        if (!multipartFile.isEmpty()) {
+            LocalDate usuarioFechaNacimiento= usuario.getFechaNcimientoUsuario();
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            usuario.setIdentificacionOficialFile(fileName);
+            usuario.setEdadUsuario(Period.between(usuarioFechaNacimiento, LocalDate.now()).getYears());
+            Usuario savedUser = service.guardar(usuario);
+            String uploadDir = "user-photos/" + savedUser.getIdUsuario();
+
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+        } else {
+            if (usuario.getIdentificacionOficialFile().isEmpty()) usuario.setIdentificacionOficialFile(null);
+            service.guardar(usuario);
+        }
         System.out.println(usuario);
-        service.guardar(usuario);
+        System.out.println(multipartFile.getOriginalFilename());
+
+
+
         redirectAttributes.addFlashAttribute("mensaje", "El usuario se ha guardado con éxito.");
         return "redirect:/admin/home";
     }
@@ -103,6 +153,16 @@ public class UsuarioControlador {
             redirectAttributes.addFlashAttribute("mensaje", ex.getMessage());
         }
         return "redirect:/admin/home";
+    }
+
+    @GetMapping("/admin/{idUsuario}/habilitado/{status}")
+    public String updateUsuarioEnabledStatus(@PathVariable(name = "idUsuario") Long idUsuario, @PathVariable("status") boolean habilitado, RedirectAttributes redirectAttributes){
+        service.updateUsuarioEnabledStatus(idUsuario, habilitado);
+        String status = (habilitado) ? "habilitado" : "deshabilitado";
+        String mensaje = "El usuario con el id " + idUsuario + "ha sido " + status;
+        redirectAttributes.addFlashAttribute("mensaje",mensaje);
+        return "redirect:/admin/home";
+
     }
 
 

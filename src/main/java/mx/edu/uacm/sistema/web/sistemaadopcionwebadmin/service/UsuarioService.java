@@ -3,31 +3,43 @@ package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.service;
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo.Usuario;
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.repositorio.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
+@Transactional
 public class UsuarioService {
 
+    public static final int USUARIOS_POR_PAGINA = 4;
+
     @Autowired
-    private UsuarioRepository repository;
+    private UsuarioRepository usuarioRepository;
 
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public List<Usuario> listAll(){
-        return (List<Usuario>) repository.findAll();
+        return (List<Usuario>) usuarioRepository.findAll();
+    }
+
+    public Page<Usuario> listByPage(int pageNum){
+        Pageable pageable = PageRequest.of(pageNum - 1, USUARIOS_POR_PAGINA);
+        return usuarioRepository.findAll(pageable);
     }
 
 
-    public void guardar(Usuario usuario) {
+    public Usuario guardar(Usuario usuario) {
         boolean estaActualizandoElUsuario = (usuario.getIdUsuario() != null);
 
         if (estaActualizandoElUsuario) {
-            Usuario existeUsuario = repository.findById(usuario.getIdUsuario()).get();
+            Usuario existeUsuario = usuarioRepository.findById(usuario.getIdUsuario()).get();
             if (usuario.getPassword().isEmpty()) {
                 usuario.setPassword(existeUsuario.getPassword());
             }else {
@@ -37,7 +49,7 @@ public class UsuarioService {
             encodePassword(usuario);
 
         }
-        repository.save(usuario);
+        return usuarioRepository.save(usuario);
     }
 
     private void encodePassword(Usuario usuario){
@@ -46,7 +58,7 @@ public class UsuarioService {
     }
 
     public boolean isEmailUnique(Long id,String email){
-        Usuario usuarioByEmail = repository.getUsuarioByEmailUsuario(email);
+        Usuario usuarioByEmail = usuarioRepository.getUsuarioByEmailUsuario(email);
         if (usuarioByEmail == null) return true;
 
         boolean estaCreandoNuevo = (id == null);
@@ -63,18 +75,23 @@ public class UsuarioService {
 
     public Usuario get(Long id) throws UserNotFoundException {
         try {
-            return repository.findById(id).get();
+            return usuarioRepository.findById(id).get();
         } catch (NoSuchElementException ex) {
             throw new UserNotFoundException("No se pudo encontrar ningún usuario con ID: " + id);
         }
     }
 
     public void delete(Long id) throws UserNotFoundException {
-        Long countById = repository.countByIdUsuario(id);
+        Long countById = usuarioRepository.countByIdUsuario(id);
         if (countById == null || countById == 0) {
             throw new UserNotFoundException("No se pudo encontrar ningún usuario con ID: " + id);
         }
-        repository.deleteById(id);
+        usuarioRepository.deleteById(id);
         
     }
+
+    public void updateUsuarioEnabledStatus(Long id, boolean habilitado){
+        usuarioRepository.updateEnableHabilidato(id, habilitado);
+    }
+
 }

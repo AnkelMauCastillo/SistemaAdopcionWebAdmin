@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}"/>    
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/> 
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
     <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
     <title>Admin</title>
 </head>
+
 <body>
     <h2>Admin Home</h2>
     <a th:href="@{/admin/nuevo}">Crear Nuevo Admin</a>
@@ -18,13 +20,14 @@
     <div th:if="${mensaje != null}" class="alert alert-success text-center">
         [[${mensaje}]]
     </div>
-    
+
     <div>
         <table class="table table-bordered table-striped table-hover table-responsive-xL">
             <thead class="thead-dark">
                 <tr>
                     <th>ID USUARIO</th>
                     <th>ROL USUARIO</th>
+                    <th>INE</th>
                     <th>NOMBRE</th>
                     <th>APELLIDO PATERNO</th>
                     <th>APELLIDO MATERNO</th>
@@ -41,47 +44,89 @@
                     <th>CELULAR</th>
                     <th>TELEFONO FIJO</th>
                     <th>COMPROBANTE DE DOMICILIO</th>
-                    <th>INE</th>
                     <th>HABILITADO</th>
                     <th></th>
-                </tr>               
-                <tbody>
-                    <tr th:each="usuario : ${usuarioList}">
-                        <td>[[${usuario.idUsuario}]]</td>
-                        <td>[[${usuario.role}]]</td>
-                        <td>[[${usuario.nombreUsuario}]]</td>
-                        <td>[[${usuario.apellidoPaterno}]]</td>
-                        <td>[[${usuario.apellidoMaterno}]]</td>
-                        <td>[[${usuario.fechaNcimientoUsuario}]]</td>
-                        <td>[[${usuario.generoUsuario}]]</td>
-                        <td>[[${usuario.emailUsuario}]]</td>
-                        <td>[[${usuario.edadUsuario}]]</td>
-                        <td>[[${usuario.calleUsuario}]]</td>
-                        <td>[[${usuario.codigoPostalUsuario}]]</td>
-                        <td>[[${usuario.alcaldia}]]</td>
-                        <td>[[${usuario.colonia}]]</td>
-                        <td>[[${usuario.numeroExterior}]]</td>
-                        <td>[[${usuario.numeroInterior}]]</td>                        
-                        <td>[[${usuario.celUsuario}]]</td>
-                        <td>[[${usuario.telFijoUsuario}]]</td>
-                        <td><span class="fa-solid fa-location-dot fa-2x icon-silver"></span></td>
-                        <td><span class="fa-solid fa-image-portrait fa-2x icon-silver"></span></td>
-                        <td>
-                            <i th:if="${usuario.habilitado == true}" class="fa-solid fa-circle-check icon-green fa-2x"></i>
-                            <i th:if="${usuario.habilitado != true}" class="fa-solid fa-circle-check icon-dark fa-2x"></i>
-                        </td>
-                        <td>
-                            <a class="fa-sharp fa-solid fa-pen-to-square fa-2x icon-green" th:href="@{'/admin/editar/' +  ${usuario.idUsuario}}" title="Editar al Usuario"></a>&nbsp; &nbsp; 
-                            <a class="fas fa-trash fa-2x icon-dark link-delete" 
-                            th:href="@{'/admin/eliminar/' + ${usuario.idUsuario}}" 
-                            title="Eliminar Usuario"
-                            th:userId="*{usuario.idUsuario}"></a>                                                 
-                           
-                        </td>
-                    </tr>
-                </tbody> 
+                </tr>
+            <tbody>
+                <tr th:each="usuario : ${usuarioList}">
+                    <td>[[${usuario.idUsuario}]]</td>
+                    <td>[[${usuario.role}]]</td>
+                    <td>
+                        <span th:if="${usuario.identificacionOficialFile == null}"
+                            class="fa-solid fa-image-portrait fa-2x icon-silver"></span>
+                        <img th:if="${usuario.identificacionOficialFile != null}" th:src="@{${usuario.IneImagePath}}"
+                            style="width: 100px;">
+                    </td>
+                    <td>[[${usuario.nombreUsuario}]]</td>
+                    <td>[[${usuario.apellidoPaterno}]]</td>
+                    <td>[[${usuario.apellidoMaterno}]]</td>
+                    <td>[[${usuario.fechaNcimientoUsuario}]]</td>
+                    <td>[[${usuario.generoUsuario}]]</td>
+                    <td>[[${usuario.emailUsuario}]]</td>
+                    <td>[[${usuario.edadUsuario}]]</td>
+                    <td>[[${usuario.calleUsuario}]]</td>
+                    <td>[[${usuario.codigoPostalUsuario}]]</td>
+                    <td>[[${usuario.alcaldia}]]</td>
+                    <td>[[${usuario.colonia}]]</td>
+                    <td>[[${usuario.numeroExterior}]]</td>
+                    <td>[[${usuario.numeroInterior}]]</td>
+                    <td>[[${usuario.celUsuario}]]</td>
+                    <td>[[${usuario.telFijoUsuario}]]</td>
+                    <td><span class="fa-solid fa-location-dot fa-2x icon-silver"></span></td>
+                    <td>
+                        <a th:if="${usuario.habilitado == true}" class="fa-solid fa-circle-check icon-green fa-2x"
+                            th:href="@{'/admin/' + ${usuario.idUsuario} + '/habilitado/false'}"
+                            title="Deshabilitar el usuario"></a>
+
+                        <a th:if="${usuario.habilitado != true}" class="fa-solid fa-circle icon-dark fa-2x"
+                            th:href="@{'/admin/' + ${usuario.idUsuario} + '/habilitado/true'}"
+                            title="Habilitar el usuario"></a>
+                    </td>
+                    <td>
+                        <a class="fa-sharp fa-solid fa-pen-to-square fa-2x icon-green"
+                            th:href="@{'/admin/editar/' +  ${usuario.idUsuario}}" title="Editar al Usuario"></a>&nbsp;
+                        &nbsp;
+                        <a class="fas fa-trash fa-2x icon-dark link-delete"
+                            th:href="@{'/admin/eliminar/' + ${usuario.idUsuario}}" title="Eliminar Usuario"
+                            th:userId="*{usuario.idUsuario}"></a>
+
+                    </td>
+                </tr>
+            </tbody>
             </thead>
         </table>
+    </div>
+
+    <div class="text-center m-1" th:if="${totalItems > 0 }">
+        <span>Mostrando usuarios # [[${starCount}]] a [[${endCount}]] de [[${totalItems}]]</span>
+    </div>
+
+    <div class="text-center m-1" th:unless="${totalItems > 0 }">
+        <span>No users found</span>
+    </div>
+
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                    <a class="page-link" th:href="@{/admin/page/1}">First</a>
+                </li>
+                <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+                    <a class="page-link" th:href="@{'/admin/page/' + ${currentPage - 1}}">Previous</a>
+                </li>
+                <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" 
+                th:each=" i : ${#numbers.sequence(1, totalPages)}">
+                    <a class="page-link" th:href="@{'/admin/page/' + ${i}}">[[${i}]]</a>
+                </li>                
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                    <a class="page-link" th:href="@{'/admin/page/' + ${currentPage + 1}}">Next</a>
+                </li>
+
+                <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+                    <a class="page-link" th:href="@{'/admin/page/' + ${totalPages}}">Last</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <div class="modal fade text-center" id="confirmModal">
@@ -90,16 +135,16 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Confirmación de Eliminación</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>                
+                </div>
                 <div class="modal-body">
                     <span id="confirmText"></span>
                 </div>
                 <div class="modal-footer">
                     <a href="" class="btn btn-success" id="yesButton">Aceptar</a>
-                    <button type="button" class="btn btn-danger"  data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
                 </div>
             </div>
-            
+
         </div>
     </div>
     <script type="text/javascript">
@@ -112,8 +157,9 @@
                 $("#yesButton").attr("href", link.attr("href"));
                 $("#confirmText").text("¿Está seguro de que desea eliminar este ID de usuario " + userId + "?");
                 $("#confirmModal").modal();
-            });            
+            });
         });
     </script>
 </body>
+
 </html>

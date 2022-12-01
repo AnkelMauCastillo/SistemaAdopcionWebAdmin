@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +30,16 @@ public class UsuarioService {
         return (List<Usuario>) usuarioRepository.findAll();
     }
 
-    public Page<Usuario> listByPage(int pageNum){
-        Pageable pageable = PageRequest.of(pageNum - 1, USUARIOS_POR_PAGINA);
+    public Page<Usuario> listByPage(int pageNum, String sortField, String sortDir, String keyword){
+        Sort sort = Sort.by(sortField);
+
+        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+        Pageable pageable = PageRequest.of(pageNum - 1, USUARIOS_POR_PAGINA, sort);
+
+        if (keyword != null) {
+            return usuarioRepository.findAll(keyword, pageable);
+        }
+
         return usuarioRepository.findAll(pageable);
     }
 

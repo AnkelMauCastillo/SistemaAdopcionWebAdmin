@@ -1,6 +1,8 @@
 package mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.repositorio;
 
 import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.modelo.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,6 +20,9 @@ public interface UsuarioRepository extends PagingAndSortingRepository<Usuario, L
     public Usuario getUsuarioByEmailUsuario(@Param("email") String email);
 
     public Long countByIdUsuario(Long idUsuario);
+
+    @Query("select u from Usuario u WHERE CONCAT(u.idUsuario, ' ', u.emailUsuario, ' ', u.nombreUsuario, ' ', u.apellidoPaterno, ' ', u.apellidoMaterno) like %?1%")
+    public Page<Usuario> findAll(String Keyword, Pageable pageable);
 
     @Query("UPDATE Usuario u SET u.habilitado = ?2 where u.idUsuario = ?1")
     @Modifying

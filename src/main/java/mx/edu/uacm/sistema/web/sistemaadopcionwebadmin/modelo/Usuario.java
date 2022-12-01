@@ -4,7 +4,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "usuarios")
@@ -40,13 +43,17 @@ public class Usuario {
     private String password;
     private boolean habilitado;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Mascota> mascotas;
+    @ManyToMany(mappedBy = "usuarios")
+    private Set<Mascota> mascotas = new HashSet<>();
+
+
 
 
 
     public Usuario() {
     }
+
+
 
     public Long getIdUsuario() {
         return idUsuario;
@@ -216,29 +223,20 @@ public class Usuario {
         this.habilitado = habilitado;
     }
 
+    public Set<Mascota> getMascotas() {
+        return mascotas;
+    }
+
+    public void setMascotas(Set<Mascota> mascotas) {
+        this.mascotas = mascotas;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
-                "idUsuario=" + idUsuario +
-                ", role=" + role +
-                ", nombreUsuario='" + nombreUsuario + '\'' +
+                "nombreUsuario='" + nombreUsuario + '\'' +
                 ", apellidoPaterno='" + apellidoPaterno + '\'' +
                 ", apellidoMaterno='" + apellidoMaterno + '\'' +
-                ", fechaNcimientoUsuario=" + fechaNcimientoUsuario +
-                ", generoUsuario='" + generoUsuario + '\'' +
-                ", emailUsuario='" + emailUsuario + '\'' +
-                ", edadUsuario=" + edadUsuario +
-                ", calleUsuario='" + calleUsuario + '\'' +
-                ", codigoPostalUsuario=" + codigoPostalUsuario +
-                ", alcaldia='" + alcaldia + '\'' +
-                ", colonia='" + colonia + '\'' +
-                ", numeroExterior=" + numeroExterior +
-                ", numeroInterior=" + numeroInterior +
-                ", celUsuario=" + celUsuario +
-                ", telFijoUsuario=" + telFijoUsuario +
-                ", comprobanteDomicilioFile='" + comprobanteDomicilioFile + '\'' +
-                ", identificacionOficialFile='" + identificacionOficialFile + '\'' +
-                ", habilitado=" + habilitado +
                 '}';
     }
 
@@ -246,5 +244,10 @@ public class Usuario {
     public String getIneImagePath(){
         if (idUsuario == null || identificacionOficialFile == null) return "/image/default-user.png";
         return "/user-photos/" + this.idUsuario + "/" + this.identificacionOficialFile;
+    }
+
+    public void addMascotas(Mascota mascota){
+        this.mascotas.add(mascota);
+
     }
 }

@@ -49,7 +49,7 @@ public class UsuarioControlador {
 
     @GetMapping("/admin/home")
     public String verPaginaDonadorHome(Model model){
-        return listByPage(1, model);
+        return listByPage(1, model, "nombreUsuario", "asc", null);
     }
 
     @GetMapping("/admin/login")
@@ -58,8 +58,13 @@ public class UsuarioControlador {
     }
 
     @GetMapping("/admin/page/{pageNum}")
-    public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model){
-        Page<Usuario> usuarioPage= service.listByPage(pageNum);
+    public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
+                             @Param("sortField") String sortField, @Param("sortDir") String sortDir,
+                             @Param("keyword") String keyword){
+
+        System.out.println("Sort Field: " + sortField);
+        System.out.println("Sort Dir: " + sortDir);
+        Page<Usuario> usuarioPage= service.listByPage(pageNum, sortField, sortDir, keyword);
         List<Usuario> usuarioList = usuarioPage.getContent();
         System.out.println("Pagenum = " + pageNum);
         System.out.println("Total de Elementos = " + usuarioPage.getTotalElements());
@@ -71,12 +76,18 @@ public class UsuarioControlador {
             endCount = usuarioPage.getTotalElements();
         }
 
+        String reverseSort = sortDir.equals("asc") ? "desc" : "asc";
+
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("totalPages", usuarioPage.getTotalPages());
         model.addAttribute("starCount", starCount);
         model.addAttribute("endCount", endCount);
         model.addAttribute("totalItems", usuarioPage.getTotalElements());
-        model.addAttribute("usuarioList",usuarioList);
+        model.addAttribute("usuarioList", usuarioList);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSort", reverseSort);
+        model.addAttribute("keyword", keyword);
         return "admin/admin_home";
     }
 

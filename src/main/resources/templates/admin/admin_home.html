@@ -22,13 +22,52 @@
     </div>
 
     <div>
+        <form th:action="@{/admin/page/1}" class="form-inline">
+            <input type="hidden" name="sortField" th:value="${sortField}"/>
+            <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+            Filtrar:&nbsp;
+            <input type="search" name="keyword" th:value="${keyword}" class="form-control m-3" required/>
+            &nbsp;&nbsp;
+            <input type="submit" value="Search" class="btn btn-primary">
+            &nbsp;&nbsp;
+            <input type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
+        </form>
+    </div>
+
+    <div>
         <table class="table table-bordered table-striped table-hover table-responsive-xL">
             <thead class="thead-dark">
                 <tr>
-                    <th>ID USUARIO</th>
+                    <th>
+                        <a th:if="${sortField != 'idUsuario'}" class="text-white"
+                        th:href="@{'/admin/page/' + ${currentPage} + '?sortField=idUsuario&sortDir=' + ${sortDir}}">
+                            ID USUARIO                            
+                        </a> 
+                        <a th:if="${sortField == 'idUsuario'}" class="text-white"
+                        th:href="@{'/admin/page/' + ${currentPage} + '?sortField=idUsuario&sortDir=' + ${reverseSort}}">
+                            ID USUARIO
+                        </a>    
+                        
+                        <span th:if="${sortField == 'idUsuario'}"
+                        th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                                           
+                    </th>
                     <th>ROL USUARIO</th>
                     <th>INE</th>
-                    <th>NOMBRE</th>
+                    <th>
+                        <a th:if="${sortField != 'nombreUsuario'}" class="text-white"
+                        th:href="@{'/admin/page/' + ${currentPage} + '?sortField=nombreUsuario&sortDir=' + ${sortDir}}">
+                            NOMBRE
+                        </a> 
+
+                        <a th:if="${sortField == 'nombreUsuario'}" class="text-white"
+                        th:href="@{'/admin/page/' + ${currentPage} + '?sortField=nombreUsuario&sortDir=' + ${reverseSort}}">
+                            NOMBRE
+                        </a> 
+
+                        <span th:if="${sortField == 'nombreUsuario'}"
+                        th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                    </th>
                     <th>APELLIDO PATERNO</th>
                     <th>APELLIDO MATERNO</th>
                     <th>FECHA DE NACIMIENTO</th>
@@ -105,25 +144,25 @@
         <span>No users found</span>
     </div>
 
-    <div>
-        <nav aria-label="Page navigation example">
+    <div th:if="${totalPages > 1 }">
+        <nav>
             <ul class="pagination justify-content-center">
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a class="page-link" th:href="@{/admin/page/1}">First</a>
+                    <a class="page-link" th:href="@{'/admin/page/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">First</a>
                 </li>
                 <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-                    <a class="page-link" th:href="@{'/admin/page/' + ${currentPage - 1}}">Previous</a>
+                    <a class="page-link" th:href="@{'/admin/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Previous</a>
                 </li>
                 <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" 
                 th:each=" i : ${#numbers.sequence(1, totalPages)}">
-                    <a class="page-link" th:href="@{'/admin/page/' + ${i}}">[[${i}]]</a>
+                    <a class="page-link" th:href="@{'/admin/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
                 </li>                
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a class="page-link" th:href="@{'/admin/page/' + ${currentPage + 1}}">Next</a>
+                    <a class="page-link" th:href="@{'/admin/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
                 </li>
 
                 <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-                    <a class="page-link" th:href="@{'/admin/page/' + ${totalPages}}">Last</a>
+                    <a class="page-link" th:href="@{'/admin/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
                 </li>
             </ul>
         </nav>
@@ -148,6 +187,11 @@
         </div>
     </div>
     <script type="text/javascript">
+        
+        function clearFilter( ) {
+            window.location = "[[@{/admin/home}]]";
+        }
+
         $(document).ready(function () {
             $(".link-delete").on("click", function (e) {
                 e.preventDefault();

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="ISO-8859-1" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <title>Datos</title>
+
+
+
+</head>
+
+
+<body>
+
+    <p>
+        Tu usuario es : <b>[[${#request.userPrincipal.principal.username}]]</b>
+    </p>
+    <nav class="navbar navbar-dark bg-dark" th:object="${usuario}">
+        <span class="navbar-brand mb-0 h1">ADMIN | </span>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav" th:object="${usuario}">
+                <a class="nav-item nav-link active" th:href="@{/admin/nuevo}">Crear Nuevo Admin<span
+                        class="sr-only">(current)</span></a>
+
+                <a class="nav-item nav-link active" th:href="@{/admin/usuarios_alta}">Usuarios Registrados</a>
+                <a class="nav-item nav-link active" th:href="@{/admin/mascotas_alta}">Mascotas Dadas de Alta</a>
+
+            </div>
+        </div>
+        <form th:action="@{/admin/logout}" method="post" class="nav-item nav-link">
+            <input type="submit" value="Cerrar Sesión">
+        </form>
+    </nav>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <figure class="highcharts-figure">
+        <div id="container"></div>
+        <p class="highcharts-description">
+            Grafica que representa el total de usuarios registrados.
+        </p>
+    </figure>
+
+    <figure class="highcharts-figure">
+        <div id="container1"></div>
+        <p class="highcharts-description">
+            Grafica que representa el total de usuarios registrados.
+        </p>
+    </figure>
+
+
+    <script th:inline="javascript">
+        Highcharts.chart('container', {
+
+            title: {
+                text: 'Usuarios Registrados por Rango de Edades',
+                align: 'left'
+            },
+
+            subtitle: {
+                text: 'Sistema de Adopción',
+                align: 'left'
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Cantidad de Usuarios'
+                }
+            },
+
+            xAxis: {
+                categories: [[${ usuariosMapEdad.keySet() }]]
+
+            },
+
+
+
+            series: [{
+                name: 'Usuarios',
+                data: [[${ usuariosMapEdad.values() }]]
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        });
+
+        $(function () {
+            Highcharts.chart('container1', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Usuarios Registrados por Roll'
+                },
+                subtitle: {
+                    text: 'Sistema de Adopción'
+                },
+                xAxis: {
+                    categories: [[${ usuariosMapEdadByRol.keySet() }]],
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    max: 100,
+                    title: {
+                        text: 'Usuarios rating [in %]'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: 'Usuarios',
+                    data: [[${ usuariosMapEdadByRol.values() }]]
+                }]
+            });
+        });
+
+
+    </script>
+
+</body>
+
+</html>

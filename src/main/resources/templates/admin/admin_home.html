@@ -13,26 +13,38 @@
     <title>Admin</title>
 </head>
 
-<body>
-    <h2>Admin Home</h2>
-    <a th:href="@{/admin/nuevo}">Crear Nuevo Admin</a>
+<body>    
 
-    <div th:if="${mensaje != null}" class="alert alert-success text-center">
-        [[${mensaje}]]
-    </div>
-
-    <div>
-        <form th:action="@{/admin/page/1}" class="form-inline">
+    <p>
+        Tu usuario es : <b>[[${#request.userPrincipal.principal.username}]]</b>
+    </p>
+    <nav class="navbar navbar-dark bg-dark" th:object="${usuario}">
+        <span class="navbar-brand mb-0 h1">ADMIN | HOME</span>
+    </nav>   
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+       
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav" th:object="${usuario}">
+            <a class="nav-item nav-link active" th:href="@{/admin/nuevo}">Crear Nuevo Admin<span class="sr-only">(current)</span></a>            
+            
+            <a class="nav-item nav-link active" th:href="@{/admin/usuarios_alta}">Usuarios Registrados</a>
+            <a class="nav-item nav-link active" th:href="@{/admin/mascotas_alta}">Mascotas Dadas de Alta</a>
+            
+          </div>
+        </div>
+        <form th:action="@{/admin/page/1}" class="form-inline my-2 my-lg-0">
             <input type="hidden" name="sortField" th:value="${sortField}"/>
-            <input type="hidden" name="sortDir" th:value="${sortDir}"/>
-            Filtrar:&nbsp;
+            <input type="hidden" name="sortDir" th:value="${sortDir}"/>                
             <input type="search" name="keyword" th:value="${keyword}" class="form-control m-3" required/>
             &nbsp;&nbsp;
-            <input type="submit" value="Search" class="btn btn-primary">
+            <input type="submit" value="Buscar" class="btn btn-primary">
             &nbsp;&nbsp;
-            <input type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
+            <input type="button" value="Limpiar" class="btn btn-secondary" onclick="clearFilter()">
         </form>
-    </div>
+        <form th:action="@{/admin/logout}" method="post" class="nav-item nav-link">
+            <input type="submit" value="Cerrar Sesión">
+        </form>
+    </nav>
 
     <div>
         <table class="table table-bordered table-striped table-hover table-responsive-xL">

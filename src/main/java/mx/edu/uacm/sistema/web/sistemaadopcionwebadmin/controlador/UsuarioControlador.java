@@ -11,7 +11,6 @@ import mx.edu.uacm.sistema.web.sistemaadopcionwebadmin.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -26,8 +25,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UsuarioControlador {
@@ -95,7 +95,7 @@ public class UsuarioControlador {
     public String nuevoUsuario(Model model){
         List<String> listaRoles = new ArrayList<String>();
         Usuario usuario = new Usuario();
-        usuario.setHabilitado(true);
+            usuario.setHabilitado(true);
         agregarRoles(listaRoles);
         model.addAttribute("usuario", usuario);
         model.addAttribute("listaRoles", listaRoles);
@@ -174,6 +174,181 @@ public class UsuarioControlador {
         redirectAttributes.addFlashAttribute("mensaje",mensaje);
         return "redirect:/admin/home";
 
+    }
+
+    @GetMapping("/admin/usuarios_alta")
+    public String graficaBarra(Model model){
+        List<Usuario> usuarios = service.listAll();
+        Map<String, Integer> usuariosMap = new LinkedHashMap<>();
+        Map<String, Integer> usuariosMapEdad = new LinkedHashMap<>();
+        Map<String, Integer> usuariosMapEdadByRol = new LinkedHashMap<>();
+        int contadorDonador = 0;
+        int contadorAdmin = 0;
+        int contadorCandidato = 0;
+        List<Usuario> sumaAdmin = new ArrayList<>();
+        List<Usuario> sumaDonador = new ArrayList<>();
+        List<Usuario> sumaCandidato = new ArrayList<>();
+        int sumaA = 0;
+        int sumaB = 0;
+        int sumaC = 0;
+        int sumaD = 0;
+        int sumaE = 0;
+        int sumaF = 0;
+        int sumaG = 0;
+        int sumaH = 0;
+        int sumaI = 0;
+
+
+        for (Usuario usuario : usuarios){
+            System.out.println(usuario.getRole());
+            if (usuario.getRole().toString().equals("ADMIN")) {
+                sumaAdmin.add(usuario);
+
+                contadorAdmin++;
+                if (usuario.getEdadUsuario()>= 18 && usuario.getEdadUsuario() < 20) {
+                    sumaA++;
+
+
+                } else if (usuario.getEdadUsuario()>= 20 && usuario.getEdadUsuario() < 30) {
+                    sumaB++;
+
+                }else if (usuario.getEdadUsuario()>= 30 && usuario.getEdadUsuario() < 40) {
+                    sumaC++;
+
+                }else if (usuario.getEdadUsuario()>= 40 && usuario.getEdadUsuario() < 50) {
+                    sumaD++;
+
+                }else if (usuario.getEdadUsuario()>= 50 && usuario.getEdadUsuario() < 60) {
+                    sumaE++;
+
+                }
+                else if (usuario.getEdadUsuario()>= 60 && usuario.getEdadUsuario() < 70) {
+                    sumaF++;
+
+                }else if (usuario.getEdadUsuario()>= 70 && usuario.getEdadUsuario() < 80) {
+                    sumaG++;
+
+                }else if (usuario.getEdadUsuario()>= 80 && usuario.getEdadUsuario() < 90) {
+                    sumaH++;
+
+                }else if (usuario.getEdadUsuario()>= 90 && usuario.getEdadUsuario() < 100) {
+                    sumaI++;
+
+                }
+            } else if (usuario.getRole().toString().equals("DONADOR")) {
+                sumaDonador.add(usuario);
+                contadorDonador++;
+                if (usuario.getEdadUsuario()>= 18 && usuario.getEdadUsuario() < 20) {
+                    sumaA++;
+
+
+                } else if (usuario.getEdadUsuario()>= 20 && usuario.getEdadUsuario() < 30) {
+                    sumaB++;
+
+                }else if (usuario.getEdadUsuario()>= 30 && usuario.getEdadUsuario() < 40) {
+                    sumaC++;
+
+                }else if (usuario.getEdadUsuario()>= 40 && usuario.getEdadUsuario() < 50) {
+                    sumaD++;
+
+                }else if (usuario.getEdadUsuario()>= 50 && usuario.getEdadUsuario() < 60) {
+                    sumaE++;
+
+                }
+                else if (usuario.getEdadUsuario()>= 60 && usuario.getEdadUsuario() < 70) {
+                    sumaF++;
+
+                }else if (usuario.getEdadUsuario()>= 70 && usuario.getEdadUsuario() < 80) {
+                    sumaG++;
+
+                }else if (usuario.getEdadUsuario()>= 80 && usuario.getEdadUsuario() < 90) {
+                    sumaH++;
+
+                }else if (usuario.getEdadUsuario()>= 90 && usuario.getEdadUsuario() < 100) {
+                    sumaI++;
+
+                }
+
+            } else if (usuario.getRole().toString().equals("CANDIDATO")) {
+                sumaCandidato.add(usuario);
+                contadorCandidato++;
+                if (usuario.getEdadUsuario()>= 18 && usuario.getEdadUsuario() < 20) {
+                    sumaA++;
+
+
+                } else if (usuario.getEdadUsuario()>= 20 && usuario.getEdadUsuario() < 30) {
+                    sumaB++;
+
+                }else if (usuario.getEdadUsuario()>= 30 && usuario.getEdadUsuario() < 40) {
+                    sumaC++;
+
+                }else if (usuario.getEdadUsuario()>= 40 && usuario.getEdadUsuario() < 50) {
+                    sumaD++;
+
+                }else if (usuario.getEdadUsuario()>= 50 && usuario.getEdadUsuario() < 60) {
+                    sumaE++;
+
+                }
+                else if (usuario.getEdadUsuario()>= 60 && usuario.getEdadUsuario() < 70) {
+                    sumaF++;
+
+                }else if (usuario.getEdadUsuario()>= 70 && usuario.getEdadUsuario() < 80) {
+                    sumaG++;
+
+                }else if (usuario.getEdadUsuario()>= 80 && usuario.getEdadUsuario() < 90) {
+                    sumaH++;
+
+                }else if (usuario.getEdadUsuario()>= 90 && usuario.getEdadUsuario() < 100) {
+                    sumaI++;
+
+                }
+            }
+        }
+        System.out.println("Total de Usuarios: " + usuarios.size());
+        System.out.println("Admin: " + contadorAdmin);
+        System.out.println("Candidato: " + contadorCandidato);
+        System.out.println("Donador: " + contadorDonador);
+        usuariosMap.put("DONADOR", contadorDonador);
+        usuariosMap.put("CANDIDATO", contadorCandidato);
+        usuariosMap.put("ADMIN", contadorAdmin);
+        usuariosMapEdad.put("18-19", sumaA);
+        usuariosMapEdad.put("20-29", sumaB);
+        usuariosMapEdad.put("30-39", sumaC);
+        usuariosMapEdad.put("40-49", sumaD);
+        usuariosMapEdad.put("50-59", sumaE);
+        usuariosMapEdad.put("60-69", sumaF);
+        usuariosMapEdad.put("70-79", sumaG);
+        usuariosMapEdad.put("80-89", sumaH);
+        usuariosMapEdad.put("90-99", sumaI);
+        usuariosMapEdadByRol.put("Donador", sumaDonador.size());
+        usuariosMapEdadByRol.put("Candidato", sumaCandidato.size());
+        usuariosMapEdadByRol.put("Admin", sumaAdmin.size());
+        model.addAttribute("usuariosMapEdadByRol", usuariosMapEdadByRol);
+        model.addAttribute("usuariosMapEdad", usuariosMapEdad);
+        model.addAttribute("usuariosMap", usuariosMap);
+
+
+        return "/admin/barra_usuarios";
+    }
+
+    @GetMapping("/admin/mascotas_alta")
+    public String altaMascotas(Model model){
+        List<Mascota> mascotas = (List<Mascota>) mascotaRepo.findAll();
+        List<Mascota> mascotasTipoGato = new ArrayList<>();
+        List<Mascota> mascotasTipoPerro = new ArrayList<>();
+        for (Mascota mascota : mascotas){
+            if (mascota.getTipoDeMascota().contains("Gato")) {
+                mascotasTipoGato.add(mascota);
+            }else{
+                mascotasTipoPerro.add(mascota);
+            }
+        }
+        System.out.println("Perros" + mascotasTipoPerro.size());
+        System.out.println("Gatos" + mascotasTipoGato.size());
+        model.addAttribute("Gatos", mascotasTipoGato.size());
+        model.addAttribute("Perros", mascotasTipoPerro.size());
+        System.out.println(mascotas);
+        return "/admin/pie_mascota";
     }
 
 

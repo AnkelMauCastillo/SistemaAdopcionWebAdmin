@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1" />
+<title>PIE</title>
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <p>
+        Tu usuario es : <b>[[${#request.userPrincipal.principal.username}]]</b>
+    </p>
+    <nav class="navbar navbar-dark bg-dark" th:object="${usuario}">
+        <span class="navbar-brand mb-0 h1">ADMIN | DATOS MASCOTAS</span>
+    </nav>   
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+       
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav" th:object="${usuario}">
+            <a class="nav-item nav-link active" th:href="@{/admin/nuevo}">Crear Nuevo Admin<span class="sr-only">(current)</span></a>            
+            
+            <a class="nav-item nav-link active" th:href="@{/admin/usuarios_alta}">Usuarios Registrados</a>
+            <a class="nav-item nav-link active" th:href="@{/admin/mascotas_alta}">Mascotas Dadas de Alta</a>
+            
+          </div>
+        </div>
+        <form th:action="@{/admin/page/1}" class="form-inline my-2 my-lg-0">
+            <input type="hidden" name="sortField" th:value="${sortField}"/>
+            <input type="hidden" name="sortDir" th:value="${sortDir}"/>                
+            <input type="search" name="keyword" th:value="${keyword}" class="form-control m-3" required/>
+            &nbsp;&nbsp;
+            <input type="submit" value="Buscar" class="btn btn-primary">
+            &nbsp;&nbsp;
+            <input type="button" value="Limpiar" class="btn btn-secondary" onclick="clearFilter()">
+        </form>
+        <form th:action="@{/admin/logout}" method="post" class="nav-item nav-link">
+            <input type="submit" value="Cerrar Sesión">
+        </form>
+    </nav>
+    
+
+	<figure class="highcharts-figure">
+        <div id="container"></div>
+        
+    </figure>
+	<script th:inline="javascript">
+		Highcharts.chart('container', {
+			chart : {
+				type : 'pie',
+				options3d : {
+					enabled : true,
+					alpha : 50,
+					beta : 0
+				}
+			},
+			title : {
+				text : 'Resultado Porcentaje de Mascotas'
+			},
+			tooltip : {
+				pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+			},
+			plotOptions : {
+				pie : {
+					allowPointSelect : true,
+					cursor : 'pointer',
+					depth : 35,
+					dataLabels : {
+						enabled : true,
+						format :  '<b>{point.name}</b>: {point.percentage:.1f} %'
+					}
+				}
+			},
+			series : [ {
+				type : 'pie',
+				name : 'Ratio',
+				data : [ [ 'Gatos', [[${Gatos}]] ], 
+                [ 'Perros', [[${Perros}]] ]  ]
+			} ]
+		});
+	</script>
+</body>
+</html>
